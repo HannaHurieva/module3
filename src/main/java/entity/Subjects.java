@@ -33,7 +33,7 @@ public class Subjects {
             //foreign key for Groups in subject_group table
             joinColumns = @JoinColumn(name = "subjects_id"),
             //foreign key for other side - Subjects in subject_group table
-            inverseJoinColumns = @JoinColumn(name = "groups_st_id"))
+            inverseJoinColumns = @JoinColumn(name = "groups_st_specialty"))
     private Set<Groups> groups = new HashSet<>();
 
     public Subjects() {

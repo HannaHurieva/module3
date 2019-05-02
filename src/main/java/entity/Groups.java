@@ -27,7 +27,7 @@ public class Groups {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "subject_group",
             //foreign key for Groups in subject_group table
-            joinColumns = @JoinColumn(name = "groups_st_id"),
+            joinColumns = @JoinColumn(name = "groups_st_specialty"),
             //foreign key for other side - Subjects in subject_group table
             inverseJoinColumns = @JoinColumn(name = "subjects_id"))
     private Set<Subjects> subjects = new HashSet<>();
