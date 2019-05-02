@@ -5,12 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "groups_st")
 public class Groups {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int group_id;
 
     @Column(name = "title")
@@ -25,6 +24,14 @@ public class Groups {
     @Column(name = "number_of_students")
     private int numberOfStudents;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "subject_group",
+            //foreign key for Groups in subject_group table
+            joinColumns = @JoinColumn(name = "groups_st_id"),
+            //foreign key for other side - Subjects in subject_group table
+            inverseJoinColumns = @JoinColumn(name = "subjects_id"))
+    private Set<Subjects> subjects = new HashSet<>();
+
     public Groups() {
     }
 
@@ -35,15 +42,6 @@ public class Groups {
         this.numberOfStudents = numberOfStudents;
     }
 
-
-    private Set<Subjects> subjects = new HashSet<>();
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "subject_group",
-            //foreign key for Groups in subject_group table
-            joinColumns = @JoinColumn(name = "group_id"),
-            //foreign key for other side - Subjects in subject_group table
-            inverseJoinColumns = @JoinColumn(name = "subject_id"))
     public Set<Subjects> getSubjects() {
         return subjects;
     }
@@ -52,15 +50,16 @@ public class Groups {
         this.subjects = subjects;
     }
 
-
-
+    public void addSubject (Subjects subject){
+        subjects.add(subject);
+    }
 
     public int getGroup_id() {
         return group_id;
     }
 
-    public void setGroup_id(int id) {
-        this.group_id = id;
+    public void setGroup_id(int group_id) {
+        this.group_id = group_id;
     }
 
     public String getTitle() {
@@ -95,15 +94,14 @@ public class Groups {
         this.numberOfStudents = numberOfStudents;
     }
 
-
     @Override
     public String toString() {
         return "Groups{" +
-                "id=" + group_id +
+                "group_id=" + group_id +
                 ", title='" + title + '\'' +
                 ", specialty='" + specialty + '\'' +
                 ", department='" + department + '\'' +
-                ", numberOfStudents='" + numberOfStudents + '\'' +
+                ", numberOfStudents=" + numberOfStudents +
                 '}';
     }
 }

@@ -5,34 +5,39 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="subjects")
+@Table(name = "subjects")
 public class Subjects {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int subject_id;
 
-    @Column(name="title")
+    @Column(name = "title")
     private String title;
 
-    @Column(name="type")
+    @Column(name = "type")
     private String type;
 
-    @Column(name="hours")
+    @Column(name = "hours")
     private int hours;
 
-    @Column(name="cost_per_hour")
+    @Column(name = "cost_per_hour")
     private int cost;
 
-    @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="teacher_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
     private Teachers teacher;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "subject_group",
+            //foreign key for Groups in subject_group table
+            joinColumns = @JoinColumn(name = "subjects_id"),
+            //foreign key for other side - Subjects in subject_group table
+            inverseJoinColumns = @JoinColumn(name = "groups_st_id"))
+    private Set<Groups> groups = new HashSet<>();
 
     public Subjects() {
     }
-
 
     public Subjects(String title, String type, int hours, int cost) {
         this.title = title;
@@ -41,15 +46,6 @@ public class Subjects {
         this.cost = cost;
     }
 
-
-    private Set<Groups> groups = new HashSet<>();
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "subject_group",
-            //foreign key for Groups in subject_group table
-            joinColumns = @JoinColumn(name = "subject_id"),
-            //foreign key for other side - Subjects in subject_group table
-            inverseJoinColumns = @JoinColumn(name = "group_id"))
     public Set<Groups> getGroups() {
         return groups;
     }
@@ -58,6 +54,9 @@ public class Subjects {
         this.groups = groups;
     }
 
+    public void addGroup(Groups group) {
+        groups.add(group);
+    }
 
     public int getSubject_id() {
         return subject_id;
