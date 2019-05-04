@@ -27,3 +27,5 @@ hs_err_pid*
 /.idea/
 /module3.iml
 /target/
+!/src/main/java/entity/Payments.java
+/src/main/java/entity/Payments.java
