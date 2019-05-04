@@ -35,6 +35,11 @@ public class Groups {
     public Groups() {
     }
 
+    public Groups(String title, int numberOfStudents) {
+        this.title = title;
+        this.numberOfStudents = numberOfStudents;
+    }
+
     public Groups(String title, String specialty, String department, int numberOfStudents) {
         this.title = title;
         this.specialty = specialty;

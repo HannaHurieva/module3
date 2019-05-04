@@ -18,7 +18,7 @@ public class Teachers {
     private String firstName;
 
     @Column(name="second_name")
-    private String second_name;
+    private String secondName;
 
     @Column(name="tel")
     private String tel;
@@ -35,7 +35,7 @@ public class Teachers {
     public Teachers(String lastName, String firstName, String secondName, String tel, int experience) {
         this.lastName = lastName;
         this.firstName = firstName;
-        this.second_name = secondName;
+        this.secondName = secondName;
         this.tel = tel;
         this.experience = experience;
     }
@@ -64,12 +64,12 @@ public class Teachers {
         this.firstName = firstName;
     }
 
-    public String getSecond_name() {
-        return second_name;
+    public String getSecondName() {
+        return secondName;
     }
 
-    public void setSecond_name(String second_name) {
-        this.second_name = second_name;
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 
     public String getTel() {
@@ -102,7 +102,7 @@ public class Teachers {
                 "id=" + id +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", second_name='" + second_name + '\'' +
+                ", second_name='" + secondName + '\'' +
                 ", tel='" + tel + '\'' +
                 ", experience=" + experience +
                 '}';

@@ -8,6 +8,7 @@ import util.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class MainApp {
     public static void main(String[] args) {
@@ -32,12 +33,10 @@ public class MainApp {
 
         // schedule of subject for coach1
         List<Subjects> subjects1 = new ArrayList<>();
-        subjects1.add(sub1);
         subjects1.add(sub2);
         subjects1.add(sub3);
         coach1.setSubjects(subjects1);
 
-        sub1.setTeacher(coach1);
         sub2.setTeacher(coach1);
         sub3.setTeacher(coach1);
 
@@ -80,28 +79,63 @@ public class MainApp {
         teachersService.add(coach2);
         teachersService.add(coach3);
 
-/*        subjectsService.add(sub1);
-        subjectsService.add(sub2);
-        subjectsService.add(sub3);
-        subjectsService.add(sub4);
-        subjectsService.add(sub5);
-        subjectsService.add(sub6);*/
-
         groupsService.add(gr);
         groupsService.add(gr1);
         groupsService.add(gr2);
 
 
-
+        System.out.println("\n\nЗАПРОС: Вывести список всех групп.");
         List<Groups> groupsList = groupsService.getAll();
         for (Groups group : groupsList) {
             System.out.println(group.toString());
         }
 
-        Teachers coach = teachersService.getById(1);
+        System.out.println("\n\nЗАПРОС: Вывести группу по id.");
+        System.out.println("Введите значение id :");
+        Scanner in = new Scanner(System.in);
+        int id = in.nextInt();
+        Groups MyGroup = groupsService.getById(id);
+        System.out.println(MyGroup.toString());
+
+
+        System.out.println("\n\nЗАПРОС: Вывести список названий групп с указанием количества студентов.");
+        System.out.println("        Отсортировать по названию группы.");
+        groupsService.getSortingByGroupsTitles_WithNumberOfStudents();
+
+
+        System.out.println("\n\nЗАПРОС: Вывести преподавателя по id.");
+        System.out.println("Введите значение id :");
+        int teacherId = in.nextInt();
+        Teachers coach = teachersService.getById(teacherId);
         System.out.println(coach.toString());
-        Subjects subj = subjectsService.getById(6);
+
+
+        System.out.println("\n\nЗАПРОС: Вывести ФИО всех преподавателей, стаж которых больше 'exp' лет.");
+        System.out.println("Введите значение стажа - exp :");
+        int experience = in.nextInt();
+        List<Teachers> teachersExp = teachersService.getByExperience(experience);
+        for (Teachers teacher : teachersExp) {
+            System.out.println(teacher.toString());
+        }
+
+
+        System.out.println("\n\nЗАПРОС: Вывести ФИО всех преподавателей, стаж которых больше 'exp' лет.");
+        System.out.println("            и которые могут вести предметы 'subj1' или 'subj2'.");
+        System.out.println("Введите значение стажа - exp :");
+        int exp = in.nextInt();
+        System.out.println("Введите название первого предмета - subj1 :");
+        String subj1 = in.nextLine();
+        System.out.println("Введите название второго предмета - subj2 :");
+        String subj2 = in.nextLine();
+        teachersService.getByExperienceAndSubjects(exp, subj1, subj2);
+
+
+        System.out.println("\n\nЗАПРОС: Вывести предмет по id.");
+        System.out.println("Введите значение id :");
+        int subjectId = in.nextInt();
+        Subjects subj = subjectsService.getById(subjectId);
         System.out.println(subj.toString());
+        in.close();
 
 
         HibernateUtil.shutdown();
