@@ -124,16 +124,28 @@ public class MainApp {
         teachersService.getTeachersAndGroupstitles();
 
 
+        System.out.println("\n\nЗАПРОС: Посчитать нагрузку для преподавателя 'last_name'");
+        String split = in.nextLine(); // service for '/n'
+        System.out.println("Введите фамилию преподавателя - last_name :");
+        String lastName = in.nextLine();
+        teachersService.getCostHoursByTeacher(lastName);
+
+
         System.out.println("\n\nЗАПРОС: Вывести ФИО всех преподавателей, стаж которых больше 'exp' лет.");
         System.out.println("        и которые могут вести предметы 'subj1' или 'subj2'.");
         System.out.println("Введите значение стажа - exp :");
         int exp = in.nextInt();
-        String split = in.nextLine();
+        split = in.nextLine(); // service for '/n'
         System.out.println("и название первого предмета - subj1 :");
         String subj1 = in.nextLine();
         System.out.println("Введите название второго предмета - subj2 :");
         String subj2 = in.nextLine();
         teachersService.getByExperienceAndSubjects(exp, subj1, subj2);
+
+
+        System.out.println("\n\nЗАПРОС: Вывести список предметов для каждой специальности");
+        System.out.println("        с указанием количества отведенных на них часов.");
+        groupsService.getSubjectsHoursListBySpeciality();
 
 
         System.out.println("\n\nЗАПРОС: Вывести предмет по id.");

@@ -117,6 +117,41 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
         }
     }
 
+    // Вывести список предметов для каждой специальности
+    // с указанием количества отведенных на них часов.
+    public void getSubjectsHoursListBySpeciality() {
+        try {
+            //open session with a transaction
+            openTransactionSession();
+
+            String sql = "SELECT DISTINCT groups_st.specialty, subjects.title, subjects.`type`, subjects.hours FROM groups_st " +
+                    "JOIN subject_group ON groups_st.group_id = subject_group.groups_st_specialty " +
+                    "JOIN subjects ON subject_group.subjects_id = subjects.subject_id ";
+
+            Session session = getSession();
+            Query query = session.createSQLQuery(sql);
+
+            //Retrieving values ​​in multiple columns
+            List<Object[]> subjectsSpecialityList = (List<Object[]>) query.getResultList();
+            //Accessing each object array to retrieve title og group and number of students in it
+            for (Object[] subjectsSpeciality : subjectsSpecialityList) {
+                System.out.println("Speciality = " + (String) subjectsSpeciality[0]);
+                System.out.println("Subjects Title = " + (String) subjectsSpeciality[1]);
+                System.out.println("Type = " + (String) subjectsSpeciality[2]);
+                System.out.println("Hours total = " + (Integer) subjectsSpeciality[3]);
+                System.out.println();
+            }
+
+            //close session with a transaction
+            closeTransactionSesstion();
+        } catch (Exception e) {
+            if (getTransaction() != null) {
+                getTransaction().rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
     //update
     public void update(Groups group) {
         try {

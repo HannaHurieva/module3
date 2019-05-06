@@ -148,6 +148,40 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
         }
     }
 
+    // Посчитать нагрузку для преподавателя 'last_name'.
+    public void getCostHoursByTeacher(String lastName) {
+        try {
+            //open session with a transaction
+            openTransactionSession();
+
+            String sql = "SELECT DISTINCT teachers.last_name, subjects.`type`, subjects.hours, subjects.cost_per_hour FROM teachers " +
+                    "JOIN subjects ON teachers.id = subjects.teacher_id WHERE teachers.last_name= :lastName";
+
+            Session session = getSession();
+            Query query = session.createSQLQuery(sql);
+            query.setParameter("lastName", lastName);
+
+            //Retrieving values ​​in multiple columns
+            List<Object[]> costHours = (List<Object[]>) query.getResultList();
+            //Accessing each object array to retrieve title og group and number of students in it
+            for (Object[] costPerHour : costHours) {
+                System.out.println("Teacher's Last name = " + (String) costPerHour[0]);
+                System.out.println("Subject's type = " + (String) costPerHour[1]);
+                System.out.println("Total hours = " + (Integer) costPerHour[2]);
+                System.out.println("Cost per hour = " + (Integer) costPerHour[3]);
+                System.out.println();
+            }
+
+            //close session with a transaction
+            closeTransactionSesstion();
+        } catch (Exception e) {
+            if (getTransaction() != null) {
+                getTransaction().rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
 
     // Вывести список преподавателей, стаж которых больше 5 лет
     // и которые могут вести предметы «математика» и «информатика».
