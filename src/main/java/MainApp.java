@@ -119,11 +119,17 @@ public class MainApp {
         }
 
 
+        System.out.println("\n\nЗАПРОС: Вывести ФИО всех преподавателей ");
+        System.out.println("        и номера групп, в которых они преподают.");
+        teachersService.getTeachersAndGroupstitles();
+
+
         System.out.println("\n\nЗАПРОС: Вывести ФИО всех преподавателей, стаж которых больше 'exp' лет.");
-        System.out.println("            и которые могут вести предметы 'subj1' или 'subj2'.");
+        System.out.println("        и которые могут вести предметы 'subj1' или 'subj2'.");
         System.out.println("Введите значение стажа - exp :");
         int exp = in.nextInt();
-        System.out.println("Введите название первого предмета - subj1 :");
+        String split = in.nextLine();
+        System.out.println("и название первого предмета - subj1 :");
         String subj1 = in.nextLine();
         System.out.println("Введите название второго предмета - subj2 :");
         String subj2 = in.nextLine();
@@ -133,8 +139,8 @@ public class MainApp {
         System.out.println("\n\nЗАПРОС: Вывести предмет по id.");
         System.out.println("Введите значение id :");
         int subjectId = in.nextInt();
-        Subjects subj = subjectsService.getById(subjectId);
-        System.out.println(subj.toString());
+        Subjects subjId = subjectsService.getById(subjectId);
+        System.out.println(subjId.toString());
         in.close();
 
 

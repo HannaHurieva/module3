@@ -110,10 +110,48 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
         return teachersExp;
     }
 
-    //Вывести список преподавателей, стаж которых больше 5 лет
+
+    // Вывести список преподавателей
+    // и номера групп, в которых они преподают.
+    public void getTeachersAndGroupstitles() {
+        try {
+            //open session with a transaction
+            openTransactionSession();
+
+            String sql = "SELECT DISTINCT teachers.first_name, teachers.last_name, teachers.second_name, groups_st.title FROM teachers " +
+                    "JOIN subjects ON teachers.id = subjects.teacher_id " +
+                    "JOIN subject_group ON subjects.subject_id = subject_group.subjects_id " +
+                    "JOIN groups_st ON subject_group.groups_st_specialty = groups_st.group_id " +
+                    "ORDER BY teachers.second_name ";
+
+            Session session = getSession();
+            Query query = session.createSQLQuery(sql);
+
+            //Retrieving values ​​in multiple columns
+            List<Object[]> teachersGroupsList = (List<Object[]>) query.getResultList();
+            //Accessing each object array to retrieve title og group and number of students in it
+            for (Object[] teacherGroups : teachersGroupsList) {
+                System.out.println("First name = " + (String) teacherGroups[0]);
+                System.out.println("Last name = " + (String) teacherGroups[1]);
+                System.out.println("Second name = " + (String) teacherGroups[2]);
+                System.out.println("Groups title = " + (String) teacherGroups[3]);
+                System.out.println();
+            }
+
+            //close session with a transaction
+            closeTransactionSesstion();
+        } catch (Exception e) {
+            if (getTransaction() != null) {
+                getTransaction().rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+
+    // Вывести список преподавателей, стаж которых больше 5 лет
     // и которые могут вести предметы «математика» и «информатика».
     public void getByExperienceAndSubjects(int exp, String subj1, String subj2) {
-        List<Teachers> teachersList = new ArrayList<>();
         try {
             //open session with a transaction
             openTransactionSession();
@@ -147,6 +185,8 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
             e.printStackTrace();
         }
     }
+
+
 
     //update
     public void update(Teachers teacher) {
