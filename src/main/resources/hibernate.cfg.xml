@@ -27,9 +27,9 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create-drop</property>
 
-        <mapping class="entity.Teachers" />
-        <mapping class="entity.Groups" />
-        <mapping class="entity.Subjects" />
+        <mapping class="hibernate.entity.Teacher" />
+        <mapping class="hibernate.entity.GroupSt" />
+        <mapping class="hibernate.entity.Subject" />
 
     </session-factory>
 

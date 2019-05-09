@@ -1,4 +1,4 @@
-package entity;
+package hibernate.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -6,13 +6,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "subjects")
-public class Subjects {
+public class Subject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int subject_id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "type")
@@ -26,35 +26,35 @@ public class Subjects {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
-    private Teachers teacher;
+    private Teacher teacher;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "subject_group",
-            //foreign key for Groups in subject_group table
+            //foreign key for GroupSt in subject_group table
             joinColumns = @JoinColumn(name = "subjects_id"),
-            //foreign key for other side - Subjects in subject_group table
+            //foreign key for other side - Subject in subject_group table
             inverseJoinColumns = @JoinColumn(name = "groups_st_specialty"))
-    private Set<Groups> groups = new HashSet<>();
+    private Set<GroupSt> groups = new HashSet<>();
 
-    public Subjects() {
+    public Subject() {
     }
 
-    public Subjects(String title, String type, int hours, int cost) {
+    public Subject(String title, String type, int hours, int cost) {
         this.title = title;
         this.type = type;
         this.hours = hours;
         this.cost = cost;
     }
 
-    public Set<Groups> getGroups() {
+    public Set<GroupSt> getGroups() {
         return groups;
     }
 
-    public void setGroups(Set<Groups> groups) {
+    public void setGroups(Set<GroupSt> groups) {
         this.groups = groups;
     }
 
-    public void addGroup(Groups group) {
+    public void addGroup(GroupSt group) {
         groups.add(group);
     }
 
@@ -98,17 +98,17 @@ public class Subjects {
         this.cost = cost;
     }
 
-    public Teachers getTeacher() {
+    public Teacher getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(Teachers teacher) {
+    public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
 
     @Override
     public String toString() {
-        return "Subjects{" +
+        return "Subject{" +
                 "id=" + subject_id +
                 ", title='" + title + '\'' +
                 ", type='" + type + '\'' +

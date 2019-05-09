@@ -1,18 +1,18 @@
-package services;
+package hibernate.services;
 
 
-import dao.SubjectsDAO;
-import entity.Subjects;
+import hibernate.dao.SubjectsDAO;
+import hibernate.entity.Subject;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import util.SessionUtil;
+import hibernate.util.SessionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SubjectsService extends SessionUtil implements SubjectsDAO {
     //create
-    public void add(Subjects subject) {
+    public void add(Subject subject) {
         try {
             //open session with a transaction
             openTransactionSession();
@@ -21,7 +21,7 @@ public class SubjectsService extends SessionUtil implements SubjectsDAO {
             session.save(subject);
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -31,8 +31,8 @@ public class SubjectsService extends SessionUtil implements SubjectsDAO {
     }
 
     //read
-    public List<Subjects> getAll() {
-        List<Subjects> subjectsList = new ArrayList<>();
+    public List<Subject> getAll() {
+        List<Subject> subjectsList = new ArrayList<>();
         try {
             //open session with a transaction
             openTransactionSession();
@@ -40,11 +40,11 @@ public class SubjectsService extends SessionUtil implements SubjectsDAO {
             String sql = "SELECT * FROM subjects";
 
             Session session = getSession();
-            Query query = session.createNativeQuery(sql).addEntity(Subjects.class);
+            Query query = session.createNativeQuery(sql).addEntity(Subject.class);
             subjectsList = query.list();
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -55,8 +55,8 @@ public class SubjectsService extends SessionUtil implements SubjectsDAO {
     }
 
 
-    public Subjects getById(int id) {
-        Subjects subject = new Subjects();
+    public Subject getById(int id) {
+        Subject subject = new Subject();
         try {
             //open session with a transaction
             openTransactionSession();
@@ -64,13 +64,13 @@ public class SubjectsService extends SessionUtil implements SubjectsDAO {
             String sql = "SELECT * FROM subjects WHERE subject_id = :id";
 
             Session session = getSession();
-            Query query = session.createNativeQuery(sql).addEntity(Subjects.class);
+            Query query = session.createNativeQuery(sql).addEntity(Subject.class);
             query.setParameter("id", id);
 
-            subject = (Subjects) query.getSingleResult();
+            subject = (Subject) query.getSingleResult();
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -82,7 +82,7 @@ public class SubjectsService extends SessionUtil implements SubjectsDAO {
 
 
     //update
-    public void update(Subjects subject) {
+    public void update(Subject subject) {
         try {
             //open session with a transaction
             openTransactionSession();
@@ -91,7 +91,7 @@ public class SubjectsService extends SessionUtil implements SubjectsDAO {
             session.update(subject);
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -101,7 +101,7 @@ public class SubjectsService extends SessionUtil implements SubjectsDAO {
     }
 
     //delete
-    public void remove(Subjects subject) {
+    public void remove(Subject subject) {
         try {
             //open session with a transaction
             openTransactionSession();
@@ -110,7 +110,7 @@ public class SubjectsService extends SessionUtil implements SubjectsDAO {
             session.remove(subject);
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();

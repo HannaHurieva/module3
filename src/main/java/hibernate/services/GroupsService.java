@@ -1,17 +1,17 @@
-package services;
+package hibernate.services;
 
-import dao.GroupsDAO;
-import entity.Groups;
+import hibernate.dao.GroupsDAO;
+import hibernate.entity.GroupSt;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import util.SessionUtil;
+import hibernate.util.SessionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroupsService extends SessionUtil implements GroupsDAO {
     //create
-    public void add(Groups group) {
+    public void add(GroupSt group) {
         try {
             //open session with a transaction
             openTransactionSession();
@@ -20,7 +20,7 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
             session.save(group);
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -30,23 +30,23 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
     }
 
     //read
-    public List<Groups> getAll() {
-        List<Groups> groupsList = new ArrayList<>();
+    public List<GroupSt> getAll() {
+        List<GroupSt> groupsList = new ArrayList<>();
         try {
             //open session with a transaction
             openTransactionSession();
 
             //String sql = "SELECT * FROM groups_st";
-            String hql = "FROM Groups";
+            String hql = "FROM GroupSt";
 
             Session session = getSession();
-            //Query query = session.createNativeQuery(sql).addEntity(Groups.class);
+            //Query query = session.createNativeQuery(sql).addEntity(GroupSt.class);
             //Query query = session.createQuery(sql);
             Query query = session.createQuery(hql);
             groupsList = query.list();
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -57,25 +57,25 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
     }
 
 
-    public Groups getById(int id) {
-        Groups group = new Groups();
+    public GroupSt getById(int id) {
+        GroupSt group = new GroupSt();
         try {
             //open session with a transaction
             openTransactionSession();
 
             //String sql = "SELECT * FROM groups_st WHERE group_id = :id";
-            String hql = "FROM Groups WHERE group_id = :id";
+            String hql = "FROM GroupSt WHERE group_id = :id";
 
             Session session = getSession();
-            //Query query = session.createNativeQuery(sql).addEntity(Groups.class);
+            //Query query = session.createNativeQuery(sql).addEntity(GroupSt.class);
             //Query query = session.createQuery(sql);
             Query query = session.createQuery(hql);
             query.setParameter("id", id);
 
-            group = (Groups) query.getSingleResult();
+            group = (GroupSt) query.getSingleResult();
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -87,16 +87,16 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
 
     // Вывести список названий групп с указанием количества студентов.
     // Отсортировать по названию группы.
-    public void getSortingByGroupsTitles_WithNumberOfStudents() {
+    public void getSortingByGroupsTitlesWithNumberOfStudents() {
         try {
             //open session with a transaction
             openTransactionSession();
 
             //String sql = "SELECT title, number_of_students FROM groups_st ORDER BY title";
-            String hql = "SELECT title, numberOfStudents FROM Groups ORDER BY title";
+            String hql = "SELECT title, numberOfStudents FROM GroupSt ORDER BY title";
 
             Session session = getSession();
-            //Query query = session.createNativeQuery(sql).addEntity(Groups.class);
+            //Query query = session.createNativeQuery(sql).addEntity(GroupSt.class);
             Query query = session.createQuery(hql);
 
             //Retrieving values ​​in multiple columns
@@ -108,7 +108,7 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
                 System.out.println();
             }
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -136,14 +136,14 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
             //Accessing each object array to retrieve title og group and number of students in it
             for (Object[] subjectsSpeciality : subjectsSpecialityList) {
                 System.out.println("Speciality = " + (String) subjectsSpeciality[0]);
-                System.out.println("Subjects Title = " + (String) subjectsSpeciality[1]);
+                System.out.println("Subject Title = " + (String) subjectsSpeciality[1]);
                 System.out.println("Type = " + (String) subjectsSpeciality[2]);
                 System.out.println("Hours total = " + (Integer) subjectsSpeciality[3]);
                 System.out.println();
             }
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -153,7 +153,7 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
     }
 
     //update
-    public void update(Groups group) {
+    public void update(GroupSt group) {
         try {
             //open session with a transaction
             openTransactionSession();
@@ -162,7 +162,7 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
             session.update(group);
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -172,7 +172,7 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
     }
 
     //delete
-    public void remove(Groups group) {
+    public void remove(GroupSt group) {
         try {
             //open session with a transaction
             openTransactionSession();
@@ -181,7 +181,7 @@ public class GroupsService extends SessionUtil implements GroupsDAO {
             session.remove(group);
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();

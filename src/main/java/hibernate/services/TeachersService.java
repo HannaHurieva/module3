@@ -1,17 +1,17 @@
-package services;
+package hibernate.services;
 
-import dao.TeachersDAO;
-import entity.Teachers;
+import hibernate.dao.TeachersDAO;
+import hibernate.entity.Teacher;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import util.SessionUtil;
+import hibernate.util.SessionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TeachersService extends SessionUtil implements TeachersDAO {
     //create
-    public void add(Teachers teacher) {
+    public void add(Teacher teacher) {
         try {
             //open session with a transaction
             openTransactionSession();
@@ -20,7 +20,7 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
             session.save(teacher);
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -30,22 +30,22 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
     }
 
     //read
-    public List<Teachers> getAll() {
-        List<Teachers> teachersList = new ArrayList<>();
+    public List<Teacher> getAll() {
+        List<Teacher> teachersList = new ArrayList<>();
         try {
             //open session with a transaction
             openTransactionSession();
 
             //String sql = "SELECT * FROM teachers";
-            String hql = "FROM Teachers";
+            String hql = "FROM Teacher";
 
             Session session = getSession();
-            //Query query = session.createNativeQuery(sql).addEntity(Teachers.class);
+            //Query query = session.createNativeQuery(sql).addEntity(Teacher.class);
             Query query = session.createQuery(hql);
             teachersList = query.list();
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -56,24 +56,24 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
     }
 
 
-    public Teachers getById(int id) {
-        Teachers teacher = new Teachers();
+    public Teacher getById(int id) {
+        Teacher teacher = new Teacher();
         try {
             //open session with a transaction
             openTransactionSession();
 
             //String sql = "SELECT * FROM teachers WHERE id = :id";
-            String hql = "from Teachers where id = :id";
+            String hql = "from Teacher where id = :id";
 
             Session session = getSession();
-            //Query query = session.createNativeQuery(sql).addEntity(Teachers.class);
+            //Query query = session.createNativeQuery(sql).addEntity(Teacher.class);
             Query query = session.createQuery(hql);
             query.setParameter("id", id);
 
-            teacher = (Teachers) query.getSingleResult();
+            teacher = (Teacher) query.getSingleResult();
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -84,23 +84,23 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
     }
 
     //Вывести ФИО всех преподавателей, стаж которых больше 'exp' лет.
-    public List<Teachers> getByExperience(int exp) {
-        List<Teachers> teachersExp = new ArrayList<>();
+    public List<Teacher> getByExperience(int exp) {
+        List<Teacher> teachersExp = new ArrayList<>();
         try {
             //open session with a transaction
             openTransactionSession();
 
-            //String sql = "SELECT * FROM teachers WHERE id = :id";
-            String hql = "from Teachers where experience > :exp";
+            //String sql = "SELECT teachers.last_name, teachers.first_name, teachers.second_name FROM teachers WHERE teachers.experience > :exp";
+            String hql = "from Teacher where experience > :exp";
 
             Session session = getSession();
-            //Query query = session.createNativeQuery(sql).addEntity(Teachers.class);
+            //Query query = session.createNativeQuery(sql).addEntity(Teacher.Class);
             Query query = session.createQuery(hql);
             query.setParameter("exp", exp);
             teachersExp = query.list();
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -113,12 +113,12 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
 
     // Вывести список преподавателей
     // и номера групп, в которых они преподают.
-    public void getTeachersAndGroupstitles() {
+    public void getTeachersAndGroupsTitles() {
         try {
             //open session with a transaction
             openTransactionSession();
 
-            String sql = "SELECT DISTINCT teachers.first_name, teachers.last_name, teachers.second_name, groups_st.title FROM teachers " +
+            String sql = "SELECT DISTINCT teachers.last_name, teachers.first_name, teachers.second_name, groups_st.title FROM teachers " +
                     "JOIN subjects ON teachers.id = subjects.teacher_id " +
                     "JOIN subject_group ON subjects.subject_id = subject_group.subjects_id " +
                     "JOIN groups_st ON subject_group.groups_st_specialty = groups_st.group_id " +
@@ -131,15 +131,15 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
             List<Object[]> teachersGroupsList = (List<Object[]>) query.getResultList();
             //Accessing each object array to retrieve title og group and number of students in it
             for (Object[] teacherGroups : teachersGroupsList) {
-                System.out.println("First name = " + (String) teacherGroups[0]);
-                System.out.println("Last name = " + (String) teacherGroups[1]);
+                System.out.println("Last name = " + (String) teacherGroups[0]);
+                System.out.println("First name = " + (String) teacherGroups[1]);
                 System.out.println("Second name = " + (String) teacherGroups[2]);
-                System.out.println("Groups title = " + (String) teacherGroups[3]);
+                System.out.println("GroupSt title = " + (String) teacherGroups[3]);
                 System.out.println();
             }
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -149,7 +149,9 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
     }
 
     // Посчитать нагрузку для преподавателя 'last_name'.
-    public void getCostHoursByTeacher(String lastName) {
+    public int getCostHoursByTeacher(String lastName) {
+        int workingHours = 0;
+        int costHoursTotal = 0;
         try {
             //open session with a transaction
             openTransactionSession();
@@ -170,16 +172,21 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
                 System.out.println("Total hours = " + (Integer) costPerHour[2]);
                 System.out.println("Cost per hour = " + (Integer) costPerHour[3]);
                 System.out.println();
-            }
 
+                workingHours += (Integer) costPerHour[2];
+                costHoursTotal += (Integer) costPerHour[2] * (Integer) costPerHour[3];
+            }
+            System.out.println("Total working hours for teacher " + lastName + " = " + workingHours);
+            System.out.println("Total payment for teacher " + lastName + " = " + costHoursTotal);
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
             }
             e.printStackTrace();
         }
+        return workingHours;
     }
 
 
@@ -190,8 +197,8 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
             //open session with a transaction
             openTransactionSession();
 
-            String sql = "SELECT DISTINCT teachers.first_name, teachers.last_name, teachers.second_name FROM teachers" +
-                    " LEFT JOIN subjects ON teachers.id = subjects.teacher_id WHERE teachers.EXP > :exp" +
+            String sql = "SELECT DISTINCT teachers.last_name, teachers.first_name, teachers.second_name FROM teachers" +
+                    " JOIN subjects ON teachers.id = subjects.teacher_id WHERE teachers.experience > :exp" +
                     " AND (subjects.title = :subj1 OR subjects.title = :subj2)";
 
             Session session = getSession();
@@ -204,14 +211,14 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
             List<Object[]> teachersNames = (List<Object[]>) query.getResultList();
             //Accessing each object array to retrieve title og group and number of students in it
             for (Object[] teacherName : teachersNames) {
-                System.out.println("First name = " + (String) teacherName[0]);
-                System.out.println("Last name = " + (String) teacherName[1]);
+                System.out.println("Last name = " + (String) teacherName[0]);
+                System.out.println("First name = " + (String) teacherName[1]);
                 System.out.println("Second name = " + (String) teacherName[2]);
                 System.out.println();
             }
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -221,9 +228,8 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
     }
 
 
-
     //update
-    public void update(Teachers teacher) {
+    public void update(Teacher teacher) {
         try {
             //open session with a transaction
             openTransactionSession();
@@ -232,7 +238,7 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
             session.update(teacher);
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();
@@ -242,7 +248,7 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
     }
 
     //delete
-    public void remove(Teachers teacher) {
+    public void remove(Teacher teacher) {
         try {
             //open session with a transaction
             openTransactionSession();
@@ -251,7 +257,7 @@ public class TeachersService extends SessionUtil implements TeachersDAO {
             session.remove(teacher);
 
             //close session with a transaction
-            closeTransactionSesstion();
+            closeTransactionSession();
         } catch (Exception e) {
             if (getTransaction() != null) {
                 getTransaction().rollback();

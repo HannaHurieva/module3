@@ -1,17 +1,17 @@
-package entity;
+package hibernate.entity;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="teachers")
-public class Teachers {
+public class Teacher {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
 
-    @Column(name="last_name")
+    @Column(name="last_name", nullable = false)
     private String lastName;
 
     @Column(name="first_name")
@@ -20,23 +20,23 @@ public class Teachers {
     @Column(name="second_name")
     private String secondName;
 
-    @Column(name="tel")
-    private String tel;
+    @Column(name="phone", nullable = false, length = 13)
+    private String phone;
 
-    @Column(name="exp")
+    @Column(name="experience")
     private int experience;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject_id", fetch = FetchType.LAZY)
-    private List<Subjects> subjects;
+    private List<Subject> subjects;
 
-    public Teachers() {
+    public Teacher() {
     }
 
-    public Teachers(String lastName, String firstName, String secondName, String tel, int experience) {
+    public Teacher(String lastName, String firstName, String secondName, String tel, int experience) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.secondName = secondName;
-        this.tel = tel;
+        this.phone = tel;
         this.experience = experience;
     }
 
@@ -72,12 +72,12 @@ public class Teachers {
         this.secondName = secondName;
     }
 
-    public String getTel() {
-        return tel;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setTel(String tel) {
-        this.tel = tel;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public int getExperience() {
@@ -88,22 +88,22 @@ public class Teachers {
         this.experience = experience;
     }
 
-    public List<Subjects> getSubjects() {
+    public List<Subject> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(List<Subjects> subjects) {
+    public void setSubjects(List<Subject> subjects) {
         this.subjects = subjects;
     }
 
     @Override
     public String toString() {
-        return "Teachers{" +
+        return "Teacher{" +
                 "id=" + id +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", second_name='" + secondName + '\'' +
-                ", tel='" + tel + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", phone='" + phone + '\'' +
                 ", experience=" + experience +
                 '}';
     }

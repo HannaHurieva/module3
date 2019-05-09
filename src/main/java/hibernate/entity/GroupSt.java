@@ -1,4 +1,4 @@
-package entity;
+package hibernate.entity;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -6,13 +6,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "groups_st")
-public class Groups {
+public class GroupSt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int group_id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "specialty")
@@ -26,36 +26,36 @@ public class Groups {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "subject_group",
-            //foreign key for Groups in subject_group table
+            //foreign key for GroupSt in subject_group table
             joinColumns = @JoinColumn(name = "groups_st_specialty"),
-            //foreign key for other side - Subjects in subject_group table
+            //foreign key for other side - Subject in subject_group table
             inverseJoinColumns = @JoinColumn(name = "subjects_id"))
-    private Set<Subjects> subjects = new HashSet<>();
+    private Set<Subject> subjects = new HashSet<>();
 
-    public Groups() {
+    public GroupSt() {
     }
 
-    public Groups(String title, int numberOfStudents) {
+    public GroupSt(String title, int numberOfStudents) {
         this.title = title;
         this.numberOfStudents = numberOfStudents;
     }
 
-    public Groups(String title, String specialty, String department, int numberOfStudents) {
+    public GroupSt(String title, String specialty, String department, int numberOfStudents) {
         this.title = title;
         this.specialty = specialty;
         this.department = department;
         this.numberOfStudents = numberOfStudents;
     }
 
-    public Set<Subjects> getSubjects() {
+    public Set<Subject> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(Set<Subjects> subjects) {
+    public void setSubjects(Set<Subject> subjects) {
         this.subjects = subjects;
     }
 
-    public void addSubject (Subjects subject){
+    public void addSubject (Subject subject){
         subjects.add(subject);
     }
 
@@ -101,7 +101,7 @@ public class Groups {
 
     @Override
     public String toString() {
-        return "Groups{" +
+        return "GroupSt{" +
                 "group_id=" + group_id +
                 ", title='" + title + '\'' +
                 ", specialty='" + specialty + '\'' +

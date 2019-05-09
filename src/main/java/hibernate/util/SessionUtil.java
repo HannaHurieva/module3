@@ -1,4 +1,4 @@
-package util;
+package hibernate.util;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -30,7 +30,7 @@ public class SessionUtil {
         session.close();
     }
 
-    public void closeTransactionSesstion() {
+    public void closeTransactionSession() {
         transaction.commit();
         closeSession();
     }
